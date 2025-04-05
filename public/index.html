@@ -3,61 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Users List</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    table, th, td {
-      border: 1px solid #ddd;
-    }
-    th, td {
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f4f4f4;
-    }
-  </style>
+  <title>User List</title>
 </head>
 <body>
-  <h1>Users List</h1>
-  <table id="users-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Users will be dynamically added here -->
-    </tbody>
-  </table>
+  <h1>Users</h1>
+  <!-- Create a list to display user data -->
+  <ul id="user-list"></ul>
 
+  <!-- Add the JavaScript code to fetch data from the backend -->
   <script>
-    // Fetch users from the API
-    fetch('/api/users')
-      .then(response => response.json())
-      .then(users => {
-        const tableBody = document.querySelector('#users-table tbody');
-        
-        users.forEach(user => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${user.id}</td>
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-          `;
-          tableBody.appendChild(row);
+    // This function fetches data from the backend API
+    function fetchUsers() {
+      // Replace the URL with your actual backend URL
+      fetch('https://owbackend.netlify.app')  // Backend API URL
+        .then(response => response.json())  // Parse the JSON response
+        .then(data => {
+          const userList = document.getElementById('user-list');  // Get the <ul> element
+
+          // Loop through the data (users) and add them to the list
+          data.forEach(user => {
+            const li = document.createElement('li');  // Create a new <li> for each user
+            li.textContent = `${user.name} - ${user.email}`;  // Display user name and email
+            userList.appendChild(li);  // Add the <li> to the <ul>
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);  // Handle any errors
         });
-      })
-      .catch(error => console.error('Error fetching users:', error));
+    }
+
+    // Call the function to fetch users when the page loads
+    fetchUsers();
   </script>
 </body>
 </html>
